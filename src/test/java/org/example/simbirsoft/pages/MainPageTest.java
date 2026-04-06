@@ -41,4 +41,18 @@ public class MainPageTest {
         AssertJUnit.assertEquals("Message received!", alert.getText());
     }
 
+    @Test
+    public void secondTest() {
+        MainPage mainPage = new MainPage(driver,wait);
+        mainPage.setNameInput("Mark").clickSubmitButton();
+        wait.until(ExpectedConditions.alertIsPresent());
+        Alert alert = driver.switchTo().alert();
+        AssertJUnit.assertEquals("Message received!", alert.getText());
+    }
+
+    @AfterMethod
+    public void afterAlert() {
+        driver.switchTo().alert().accept();
+    }
+
 }
