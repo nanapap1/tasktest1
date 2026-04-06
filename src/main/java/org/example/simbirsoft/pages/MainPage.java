@@ -8,6 +8,7 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.Select;
 
+import java.util.Comparator;
 import java.util.List;
 
 public class MainPage {
@@ -30,11 +31,14 @@ public class MainPage {
     private WebElement selectAutomation;
     private Select selectChoice = null;
 
-    @FindAll({@FindBy(xpath = "//input[contains(@name, 'fav_drink')]")})
+    @FindBy(xpath = "//input[contains(@name, 'fav_drink')]")
     private List<WebElement> favDrinks;
 
-    @FindAll({@FindBy(xpath = "//input[contains(@name, 'fav_color')]")})
-    private List<WebElement> favColors;
+    @FindBy(xpath = "//input[contains(@name, 'fav_color')]")
+    private List<WebElement> favColor;
+
+    @FindBy(xpath = "//label[contains(text(), 'Automation tools')]//ul//li")
+    private List<WebElement> toolsAutomation;
 
     @FindBy(xpath = "//button[contains(text(), 'Submit')]")
     private WebElement submitButton;
@@ -83,8 +87,8 @@ public class MainPage {
     }
 
 
-    public MainPage setFavColors(String color) {
-        for(WebElement one : favColors) {
+    public MainPage setFavColor(String color) {
+        for(WebElement one : favColor) {
             if (one.getAttribute("value").equals(color))
                 one.click();
         }
@@ -96,12 +100,20 @@ public class MainPage {
         return this;
     }
 
-    public MainPage fill(String nameInput, String passwordInput, String emailInput, String messageInput, String selectAutomation, String selectChoice, List<String> favDrinks, String favColors) {
+    public MainPage fill(String nameInput, String passwordInput, List<String> favDrinks, String favColor, String selectAutomation, String emailInput, String messageInput) {
         return this.setNameInput(nameInput)
                 .setPasswordInput(passwordInput).setEmailInput(emailInput)
                 .setMessageInput(messageInput).setSelectAutomation(selectAutomation)
-                .setFavDrinks(favDrinks).setFavColors(favColors)
+                .setFavDrinks(favDrinks).setFavColor(favColor)
                 .clickSubmitButton();
+    }
+
+    public int countTools() {
+        return toolsAutomation.size();
+    }
+
+    public String largestTool() {
+        return toolsAutomation.stream().max(Comparator.comparingInt(el -> el.getText().length())).get().getText();
     }
 
 }
