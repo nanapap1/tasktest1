@@ -108,10 +108,6 @@ public class MainPage {
         return this;
     }
 
-    public String getValidationMessage() {
-        return nameInput.getAttribute("validationMessage");
-    }
-
     public MainPage fill(String nameInput, String passwordInput, List<String> favDrinks, String favColor, String selectAutomation, String emailInput, String messageInput) {
         return this.setNameInput(nameInput)
                 .setPasswordInput(passwordInput).setEmailInput(emailInput)

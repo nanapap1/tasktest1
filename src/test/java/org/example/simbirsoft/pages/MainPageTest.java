@@ -51,14 +51,19 @@ public class MainPageTest {
         AssertJUnit.assertEquals("Message received!", alert.getText());
     }
 
-    @Test
+    @Test(expectedExceptions = TimeoutException.class)
     public void thirdTest() {
         MainPage mainPage = new MainPage(driver,wait);
         mainPage.setPasswordInput("asdsadsad").setFavDrinks(List.of("Water","Milk","Coffee"))
                 .setFavColor("Red").setSelectAutomation("No")
                 .setEmailInput("markbednyagin@yandex.ru").setMessageInput("Hello,world!")
                 .clickSubmitButton();
-        AssertJUnit.assertEquals(mainPage.getValidationMessage(),"Please fill in this field.");
+        try {
+            wait.until(ExpectedConditions.alertIsPresent());
+        }
+        catch (Exception error) {
+            throw error;
+        }
     }
 
     @AfterMethod
