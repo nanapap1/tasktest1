@@ -87,8 +87,7 @@ public class MainPage {
         for(String drink : drinks)
             for(WebElement one : favDrinks) {
                 if (one.getText().equals(drink)) {
-                        wait.until(ExpectedConditions.visibilityOf(one));
-                        one.click();
+                        new Actions(driver).moveToElement(one).click().perform();
                 }
             }
         return this;
@@ -107,6 +106,10 @@ public class MainPage {
     public MainPage clickSubmitButton() {
         new Actions(driver).moveToElement(submitButton).click().perform();
         return this;
+    }
+
+    public String getValidationMessage() {
+        return nameInput.getAttribute("validationMessage");
     }
 
     public MainPage fill(String nameInput, String passwordInput, List<String> favDrinks, String favColor, String selectAutomation, String emailInput, String messageInput) {

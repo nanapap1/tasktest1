@@ -2,6 +2,7 @@ package org.example.simbirsoft.pages;
 
 import org.checkerframework.checker.units.qual.C;
 import org.openqa.selenium.Alert;
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -50,9 +51,29 @@ public class MainPageTest {
         AssertJUnit.assertEquals("Message received!", alert.getText());
     }
 
+    @Test
+    public void thirdTest() {
+        MainPage mainPage = new MainPage(driver,wait);
+        mainPage.setPasswordInput("asdsadsad").setFavDrinks(List.of("Water","Milk","Coffee"))
+                .setFavColor("Red").setSelectAutomation("No")
+                .setEmailInput("markbednyagin@yandex.ru").setMessageInput("Hello,world!")
+                .clickSubmitButton();
+        AssertJUnit.assertEquals(mainPage.getValidationMessage(),"Please fill in this field.");
+    }
+
     @AfterMethod
     public void afterAlert() {
-        driver.switchTo().alert().accept();
+        try{
+            wait.until(ExpectedConditions.alertIsPresent());
+            driver.switchTo().alert().accept();
+        }
+        catch (TimeoutException e) {
+            return;
+        }
+    }
+    @AfterClass
+    public void afterAll() {
+        driver.close();
     }
 
 }
