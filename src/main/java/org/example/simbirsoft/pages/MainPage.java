@@ -1,12 +1,15 @@
 package org.example.simbirsoft.pages;
 
+import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.FindAll;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
+import org.openqa.selenium.support.ui.Wait;
 
 import java.util.Comparator;
 import java.util.List;
@@ -14,6 +17,7 @@ import java.util.List;
 public class MainPage {
 
     private WebDriver driver;
+    private Wait<WebDriver> wait;
 
     @FindBy(xpath = "//label[contains(text(),'Name')]//input")
     private WebElement nameInput;
@@ -31,20 +35,21 @@ public class MainPage {
     private WebElement selectAutomation;
     private Select selectChoice = null;
 
-    @FindBy(xpath = "//input[contains(@name, 'fav_drink')]")
+    @FindBy(xpath = "//label[contains(@for, 'drink')]")
     private List<WebElement> favDrinks;
 
-    @FindBy(xpath = "//input[contains(@name, 'fav_color')]")
-    private List<WebElement> favColor;
+    @FindBy(xpath = "//label[contains(@for, 'color')]")
+    private List<WebElement> favColors;
 
-    @FindBy(xpath = "//label[contains(text(), 'Automation tools')]//ul//li")
+    @FindBy(xpath = "//form//ul//li")
     private List<WebElement> toolsAutomation;
 
     @FindBy(xpath = "//button[contains(text(), 'Submit')]")
     private WebElement submitButton;
 
-    public MainPage(WebDriver driver) {
+    public MainPage(WebDriver driver, Wait<WebDriver> wait) {
         this.driver = driver;
+        this.wait = wait;
         PageFactory.initElements(driver,this);
 
     }
@@ -73,6 +78,7 @@ public class MainPage {
         if(this.selectChoice == null) {
             selectChoice = new Select(selectAutomation);
         }
+        wait.until(x -> selectAutomation.isDisplayed());
         selectChoice.selectByVisibleText(choice);
         return this;
     }
@@ -80,23 +86,26 @@ public class MainPage {
     public MainPage setFavDrinks(List<String> drinks) {
         for(String drink : drinks)
             for(WebElement one : favDrinks) {
-                if (one.getAttribute("value").equals(drink))
-                    one.click();
+                if (one.getText().equals(drink)) {
+                        wait.until(ExpectedConditions.visibilityOf(one));
+                        one.click();
+                }
             }
         return this;
     }
 
 
     public MainPage setFavColor(String color) {
-        for(WebElement one : favColor) {
-            if (one.getAttribute("value").equals(color))
-                one.click();
+        for(WebElement one : favColors) {
+            if (one.getText().equals(color)) {
+                new Actions(driver).moveToElement(one).click().perform();
+            }
         }
         return this;
     }
 
     public MainPage clickSubmitButton() {
-        this.submitButton.click();
+        new Actions(driver).moveToElement(submitButton).click().perform();
         return this;
     }
 
