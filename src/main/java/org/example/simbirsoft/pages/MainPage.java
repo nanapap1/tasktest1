@@ -28,7 +28,7 @@ public class MainPage {
     @FindBy(xpath = "//input[contains(@name,'email')]")
     private WebElement emailInput;
 
-    @FindBy(xpath = "//textarea[contains(@name, 'message')]")
+    @FindBy(id = "message")
     private WebElement messageInput;
 
     @FindBy(xpath = "//select[contains(@name, 'automation')]")
@@ -44,7 +44,7 @@ public class MainPage {
     @FindBy(xpath = "//form//ul//li")
     private List<WebElement> toolsAutomation;
 
-    @FindBy(xpath = "//button[contains(text(), 'Submit')]")
+    @FindBy(css = "button[data-testid='submit-btn'].custom_btn.btn_hover")
     private WebElement submitButton;
 
     public MainPage(WebDriver driver, Wait<WebDriver> wait) {
